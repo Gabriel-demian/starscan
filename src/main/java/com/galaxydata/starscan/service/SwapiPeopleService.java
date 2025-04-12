@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.galaxydata.starscan.dto.Person;
 import com.galaxydata.starscan.dto.SwapiListResponse;
 import com.galaxydata.starscan.exception.ResourceNotFoundException;
-import com.galaxydata.starscan.util.UrlUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
