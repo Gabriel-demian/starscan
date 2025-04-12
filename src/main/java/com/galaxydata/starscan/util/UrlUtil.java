@@ -1,6 +1,7 @@
 package com.galaxydata.starscan.util;
 
 import com.galaxydata.starscan.exception.InvalidSwapiUrlException;
+import com.galaxydata.starscan.exception.UrlUtilException;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.net.URI;
@@ -102,8 +103,9 @@ public class UrlUtil {
                         processObject(value, baseUrl);
                     }
                 } catch (IllegalAccessException e) {
-                    System.err.println("Failed to adapt URLs for field: " + field.getName());
-                    e.printStackTrace();
+                    throw new UrlUtilException("Failed to access field: " + field.getName(), e);
+                } catch (Exception e) {
+                    throw new UrlUtilException("Error adapting URLs", e);
                 }
             }
             currentClass = currentClass.getSuperclass(); // Move to the superclass

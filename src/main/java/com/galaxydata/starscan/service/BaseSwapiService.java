@@ -10,9 +10,9 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
 
-import static com.galaxydata.starscan.util.UrlUtil.adaptSwapiPageUrl;
 import static com.galaxydata.starscan.util.UrlUtil.getBaseUrl;
 import static com.galaxydata.starscan.util.UrlUtil.adaptUrls;
+import static com.galaxydata.starscan.util.UrlUtil.adaptSwapiPageUrl;
 
 /**
  * Abstract base service for interacting with the SWAPI (Star Wars API).
@@ -53,6 +53,9 @@ public abstract class BaseSwapiService<T> {
     /**
      * Fetches a paginated list of entities from the SWAPI service, adapts their URLs to the application's base URL,
      * and returns the list response.
+     *
+     * <p>The response includes pagination information, such as `previous` and `next` URLs, which are also adapted
+     * to the application's base URL.</p>
      *
      * @param page    The page number to fetch.
      * @param limit   The number of items per page.
