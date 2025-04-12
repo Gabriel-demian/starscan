@@ -7,6 +7,14 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.lang.reflect.Field;
 
+/**
+ * Utility class for handling and adapting URLs in the application.
+ * Provides methods to construct base URLs, adapt SWAPI pagination URLs,
+ * and dynamically process objects to replace SWAPI URLs with application-specific URLs.
+ *
+ * <p>This class uses reflection to inspect and modify object fields at runtime,
+ * enabling dynamic URL adaptation for nested objects and arrays.</p>
+ */
 public class UrlUtil {
 
     /**
