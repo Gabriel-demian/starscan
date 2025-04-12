@@ -1,7 +1,6 @@
 package com.galaxydata.starscan.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.galaxydata.starscan.dto.Person;
 import com.galaxydata.starscan.dto.Starship;
 import com.galaxydata.starscan.dto.SwapiListResponse;
 import com.galaxydata.starscan.exception.ResourceNotFoundException;
