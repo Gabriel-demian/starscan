@@ -13,13 +13,13 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/people/**").permitAll() // Allow public access to /planets
+                        .requestMatchers("/people/**").permitAll()
+                        .requestMatchers("/starships/**").permitAll()
                         .anyRequest().authenticated() // Secure all other endpoints
                 )
                 .csrf(AbstractHttpConfigurer::disable); // Disable CSRF for simplicity (not recommended for production)
 
         return http.build();
     }
-
 
 }

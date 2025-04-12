@@ -28,8 +28,6 @@ public class Starship extends SwapiBaseEntity {
         private String model;
         private String cost_in_credits;
         private String manufacturer;
-        private String[] pilots;
-        private String MGLT;
         private String starship_class;
         private String hyperdrive_rating;
         private String[] films;
@@ -129,22 +127,6 @@ public class Starship extends SwapiBaseEntity {
 
         public void setManufacturer(String manufacturer) {
             this.manufacturer = manufacturer;
-        }
-
-        public String[] getPilots() {
-            return pilots;
-        }
-
-        public void setPilots(String[] pilots) {
-            this.pilots = pilots;
-        }
-
-        public String getMGLT() {
-            return MGLT;
-        }
-
-        public void setMGLT(String MGLT) {
-            this.MGLT = MGLT;
         }
 
         public String getStarship_class() {
