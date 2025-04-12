@@ -28,7 +28,7 @@ public class StarController {
     public ResponseEntity<?> getPeople(
             @Valid PaginationRequest paginationRequest,
             HttpServletRequest request) {
-        SwapiListResponse people = peopleService.getPeople(
+        SwapiListResponse people = peopleService.getList(
                 paginationRequest.getPage(),
                 paginationRequest.getLimit(),
                 request
@@ -38,7 +38,7 @@ public class StarController {
 
     @GetMapping("/people/{id}")
     public ResponseEntity<?> getPeopleById(@PathVariable String id, HttpServletRequest request) {
-        Person person = peopleService.getPersonById(id, request);
+        Person person = peopleService.getById(id, request);
         return ResponseEntity.ok(person);
     }
 
@@ -46,7 +46,7 @@ public class StarController {
     public ResponseEntity<?> getStarships(
             @Valid PaginationRequest paginationRequest,
             HttpServletRequest request) {
-        SwapiListResponse starships = starshipsService.getStarships(
+        SwapiListResponse starships = starshipsService.getList(
                 paginationRequest.getPage(),
                 paginationRequest.getLimit(),
                 request
@@ -56,7 +56,7 @@ public class StarController {
 
     @GetMapping("/starships/{id}")
     public ResponseEntity<?> getStarshipsById(@PathVariable String id, HttpServletRequest request) {
-        Starship starship = starshipsService.getStarshipById(id, request);
+        Starship starship = starshipsService.getById(id, request);
         return ResponseEntity.ok(starship);
     }
 
