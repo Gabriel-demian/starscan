@@ -50,9 +50,6 @@ public class StarshipsController {
         } catch (ResourceNotFoundException ex) {
             logger.warn("Starship not found: {}", ex.getMessage());
             throw new ControllerException("Starship not found", org.springframework.http.HttpStatus.NOT_FOUND);
-        } catch (Exception ex) {
-            logger.error("Error fetching starship by ID: {}", ex.getMessage(), ex);
-            throw new ControllerException("Error fetching starship by ID", org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

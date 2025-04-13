@@ -51,9 +51,6 @@ public class VehiclesController {
         } catch (ResourceNotFoundException ex) {
             logger.warn("Vehicle not found: {}", ex.getMessage());
             throw new ControllerException("Vehicle not found", org.springframework.http.HttpStatus.NOT_FOUND);
-        } catch (Exception ex) {
-            logger.error("Error fetching vehicle by ID: {}", ex.getMessage(), ex);
-            throw new ControllerException("Error fetching vehicle by ID", org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

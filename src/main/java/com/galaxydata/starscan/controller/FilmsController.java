@@ -50,9 +50,6 @@ public class FilmsController {
         } catch (ResourceNotFoundException ex) {
             logger.warn("Film not found: {}", ex.getMessage());
             throw new ControllerException("Film not found", org.springframework.http.HttpStatus.NOT_FOUND);
-        } catch (Exception ex) {
-            logger.error("Error fetching film by ID: {}", ex.getMessage(), ex);
-            throw new ControllerException("Error fetching film by ID", org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

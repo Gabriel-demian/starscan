@@ -13,6 +13,12 @@ public class PaginationRequest {
     @Max(value = 100, message = "Limit must not exceed 100")
     private int limit = 10;
 
+    public PaginationRequest(int page, int limit) {
+        this.page = page;
+        this.limit = limit;
+    }
+
+
     public int getPage() {
         return page;
     }

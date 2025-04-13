@@ -50,9 +50,6 @@ public class PeopleController {
         } catch (ResourceNotFoundException ex) {
             logger.warn("Person not found: {}", ex.getMessage());
             throw new ControllerException("Person not found", org.springframework.http.HttpStatus.NOT_FOUND);
-        } catch (Exception ex) {
-            logger.error("Error fetching person by ID: {}", ex.getMessage(), ex);
-            throw new ControllerException("Error fetching person by ID", org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
