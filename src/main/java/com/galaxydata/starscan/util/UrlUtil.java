@@ -47,7 +47,7 @@ public class UrlUtil {
      * from the provided HTTP request object.</p>
      *
      * @param request The HTTP request object used to extract the base URL components.
-     * @return The base URL as a string (e.g., "http://localhost:8080").
+     * @return The base URL as a string (e.g., "<a href="http://localhost:8080">...</a>").
      */
     public static String getBaseUrl(HttpServletRequest request) {
         return request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
