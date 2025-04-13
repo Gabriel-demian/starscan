@@ -36,39 +36,20 @@ public class SwapiFilmsService extends BaseSwapiService<Film> {
     @Override
     public Film getById(String id, HttpServletRequest request) {
         Film film = super.getById(id, request);
-        replaceArrayUrls(film, request);
+
+        replaceArrayUrls(film, request,
+                f -> f.getProperties().getCharacters(),
+                (f, characters) -> f.getProperties().setCharacters(characters));
+
+        replaceArrayUrls(film, request,
+                f -> f.getProperties().getVehicles(),
+                (f, vehicles) -> f.getProperties().setVehicles(vehicles));
+
+        replaceArrayUrls(film, request,
+                f -> f.getProperties().getStarships(),
+                (f, starships) -> f.getProperties().setStarships(starships));
+
         return film;
-    }
-
-    private void replaceArrayUrls(Film film, HttpServletRequest request) {
-        if (film == null || film.getProperties() == null) {
-            return;
-        }
-
-        String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
-        String[] characters = film.getProperties().getCharacters();
-
-        if (characters != null) {
-            film.getProperties().setCharacters(Arrays.stream(characters)
-                    .map(characterUrl -> characterUrl.startsWith(swapiMainUrl) ? characterUrl.replace(swapiMainUrl, baseUrl) : characterUrl)
-                    .toArray(String[]::new));
-        }
-        // -------------------------------
-        String[] vehicles = film.getProperties().getVehicles();
-
-        if (vehicles != null) {
-            film.getProperties().setVehicles(Arrays.stream(vehicles)
-                    .map(vehiclesUrl -> vehiclesUrl.startsWith(swapiMainUrl) ? vehiclesUrl.replace(swapiMainUrl, baseUrl) : vehiclesUrl)
-                    .toArray(String[]::new));
-        }
-        // -------------------------------
-        String[] starships = film.getProperties().getStarships();
-
-        if (starships != null) {
-            film.getProperties().setStarships(Arrays.stream(starships)
-                    .map(starshipsUrl -> starshipsUrl.startsWith(swapiMainUrl) ? starshipsUrl.replace(swapiMainUrl, baseUrl) : starshipsUrl)
-                    .toArray(String[]::new));
-        }
     }
 
 }
