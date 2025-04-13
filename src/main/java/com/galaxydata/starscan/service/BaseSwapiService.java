@@ -11,7 +11,6 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Map;
 
 import static com.galaxydata.starscan.util.UrlUtil.getBaseUrl;
-import static com.galaxydata.starscan.util.UrlUtil.adaptUrls;
 import static com.galaxydata.starscan.util.UrlUtil.adaptSwapiPageUrl;
 
 /**
@@ -27,7 +26,7 @@ public abstract class BaseSwapiService<T> {
     protected final ObjectMapper objectMapper = new ObjectMapper();
 
     @Value("${swapi.main.url}")
-    private String swapiMainUrl;
+    protected String swapiMainUrl;
 
     /**
      * Returns the specific path for the SWAPI resource handled by the service.
@@ -100,9 +99,6 @@ public abstract class BaseSwapiService<T> {
         T entity = objectMapper.convertValue(response.get("result"), getEntityClass());
         String baseUrl = getBaseUrl(request) + getPath();
         setEntityUrl(entity, baseUrl + "/" + id);
-
-        // Adapt all String[] fields in the entity
-        adaptUrls(entity, request);
 
         return entity;
     }
