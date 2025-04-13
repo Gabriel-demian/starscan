@@ -15,6 +15,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/people/**").permitAll()
                         .requestMatchers("/starships/**").permitAll()
+                        .requestMatchers("/vehicles/**").permitAll()
+                        .requestMatchers("/films/**").permitAll()
                         .anyRequest().authenticated() // Secure all other endpoints
                 )
                 .csrf(AbstractHttpConfigurer::disable); // Disable CSRF for simplicity (not recommended for production)
