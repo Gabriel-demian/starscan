@@ -13,10 +13,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/people/**").permitAll()
-                        .requestMatchers("/starships/**").permitAll()
-                        .requestMatchers("/vehicles/**").permitAll()
-                        .requestMatchers("/films/**").permitAll()
+                        .requestMatchers("/starscan/**").permitAll() // Allow all requests to the API
                         .anyRequest().authenticated() // Secure all other endpoints
                 )
                 .csrf(AbstractHttpConfigurer::disable); // Disable CSRF for simplicity (not recommended for production)
