@@ -13,10 +13,11 @@ import static com.galaxydata.starscan.util.UrlUtil.getBaseUrl;
 public class SwapiFilmsService extends BaseSwapiService<Film> {
 
     private static final Logger logger = LoggerFactory.getLogger(SwapiFilmsService.class);
+    private static final String PATH = "/films";
 
     @Override
     protected String getPath() {
-        return "/films";
+        return PATH;
     }
 
     @Override

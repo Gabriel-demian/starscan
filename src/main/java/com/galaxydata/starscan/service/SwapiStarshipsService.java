@@ -10,10 +10,11 @@ import org.springframework.stereotype.Service;
 public class SwapiStarshipsService extends BaseSwapiService<Starship> {
 
     private static final Logger logger = LoggerFactory.getLogger(SwapiStarshipsService.class);
+    private static final String PATH = "/starships";
 
     @Override
     protected String getPath() {
-        return "/starships";
+        return PATH;
     }
 
     @Override

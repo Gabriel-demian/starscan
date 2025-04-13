@@ -9,10 +9,11 @@ import org.springframework.stereotype.Service;
 public class SwapiPeopleService extends BaseSwapiService<Person> {
 
     private static final Logger logger = LoggerFactory.getLogger(SwapiPeopleService.class);
+    private static final String PATH = "/people";
 
     @Override
     protected String getPath() {
-        return "/people";
+        return PATH;
     }
 
     @Override
