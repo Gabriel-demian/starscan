@@ -45,6 +45,19 @@ public class SwapiFilmsService extends BaseSwapiService<Film> {
             response.getResults().forEach(filmResult -> {
                 String filmUrl = baseUrl + "/" + filmResult.getUid();
                 filmResult.getProperties().setUrl(filmUrl);
+
+                // Update related URLs for starships, vehicles, and characters
+                replaceArrayUrls(filmResult, request,
+                        f -> f.getProperties().getStarships(),
+                        (f, starships) -> f.getProperties().setStarships(starships));
+
+                replaceArrayUrls(filmResult, request,
+                        f -> f.getProperties().getVehicles(),
+                        (f, vehicles) -> f.getProperties().setVehicles(vehicles));
+
+                replaceArrayUrls(filmResult, request,
+                        f -> f.getProperties().getCharacters(),
+                        (f, characters) -> f.getProperties().setCharacters(characters));
             });
         }
 
