@@ -4,6 +4,7 @@ import com.galaxydata.starscan.config.PaginationRequest;
 import com.galaxydata.starscan.dto.Film;
 import com.galaxydata.starscan.dto.Person;
 import com.galaxydata.starscan.dto.Starship;
+import com.galaxydata.starscan.dto.SwapiFilmListResponse;
 import com.galaxydata.starscan.dto.SwapiListResponse;
 import com.galaxydata.starscan.dto.Vehicle;
 import com.galaxydata.starscan.service.SwapiFilmsService;
@@ -90,7 +91,12 @@ public class StarController {
     public ResponseEntity<?> getFilms(
             @Valid PaginationRequest paginationRequest,
             HttpServletRequest request){
-        return ResponseEntity.ok("The list of Films is not supported yet");
+        SwapiFilmListResponse films = filmsService.getFilmList(
+                paginationRequest.getPage(),
+                paginationRequest.getLimit(),
+                request
+        );
+        return ResponseEntity.ok(films);
     }
 
     @GetMapping("/films/{id}")

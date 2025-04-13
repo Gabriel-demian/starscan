@@ -1,10 +1,13 @@
 package com.galaxydata.starscan.service;
 
 import com.galaxydata.starscan.dto.Film;
+import com.galaxydata.starscan.dto.SwapiFilmListResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import static com.galaxydata.starscan.util.UrlUtil.getBaseUrl;
 
 @Service
 public class SwapiFilmsService extends BaseSwapiService<Film> {
@@ -29,6 +32,23 @@ public class SwapiFilmsService extends BaseSwapiService<Film> {
     @Override
     protected void setEntityUrl(Film film, String url) {
         film.getProperties().setUrl(url);
+    }
+
+    public SwapiFilmListResponse getFilmList(int page, int limit, HttpServletRequest request) {
+        getLogger().info("Fetching film list for path: {} with page: {} and limit: {}", getPath(), page, limit);
+
+        String url = String.format("%s%s?page=%d&limit=%d", swapiMainUrl, getPath(), page, limit);
+        SwapiFilmListResponse response = restTemplate.getForObject(url, SwapiFilmListResponse.class);
+
+        if (response != null && response.getResults() != null) {
+            String baseUrl = getBaseUrl(request) + getPath();
+            response.getResults().forEach(filmResult -> {
+                String filmUrl = baseUrl + "/" + filmResult.getUid();
+                filmResult.getProperties().setUrl(filmUrl);
+            });
+        }
+
+        return response;
     }
 
     @Override
