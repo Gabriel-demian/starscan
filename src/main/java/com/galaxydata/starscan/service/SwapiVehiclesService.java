@@ -6,8 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-
 @Service
 public class SwapiVehiclesService extends BaseSwapiService<Vehicle>{
 
@@ -36,23 +34,10 @@ public class SwapiVehiclesService extends BaseSwapiService<Vehicle>{
     @Override
     public Vehicle getById(String id, HttpServletRequest request) {
         Vehicle vehicle = super.getById(id, request);
-        replaceArrayUrls(vehicle, request);
+        replaceArrayUrls(vehicle, request,
+                v -> v.getProperties().getFilms(),
+                (v, films) -> v.getProperties().setFilms(films));
         return vehicle;
-    }
-
-    private void replaceArrayUrls(Vehicle vehicle, HttpServletRequest request) {
-        if (vehicle == null || vehicle.getProperties() == null) {
-            return;
-        }
-
-        String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
-        String[] films = vehicle.getProperties().getFilms();
-
-        if (films != null) {
-            vehicle.getProperties().setFilms(Arrays.stream(films)
-                    .map(filmUrl -> filmUrl.startsWith(swapiMainUrl) ? filmUrl.replace(swapiMainUrl, baseUrl) : filmUrl)
-                    .toArray(String[]::new));
-        }
     }
 
 }

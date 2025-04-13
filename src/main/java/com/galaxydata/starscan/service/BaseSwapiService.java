@@ -8,7 +8,10 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Arrays;
 import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 import static com.galaxydata.starscan.util.UrlUtil.getBaseUrl;
 import static com.galaxydata.starscan.util.UrlUtil.adaptSwapiPageUrl;
@@ -110,4 +113,27 @@ public abstract class BaseSwapiService<T> {
      * @param url    The URL to set for the entity.
      */
     protected abstract void setEntityUrl(T entity, String url);
+
+    /**
+     * Replaces the URLs in the entity's array properties with the application's base URL.
+     *
+     * @param entity   The entity whose URLs need to be replaced.
+     * @param request  The HTTP request object used to construct the base URL.
+     * @param getFilms A function to get the array of film URLs from the entity.
+     * @param setFilms A consumer to set the modified array of film URLs back to the entity.
+     */
+    protected <T> void replaceArrayUrls(T entity, HttpServletRequest request, Function<T, String[]> getFilms, BiConsumer<T, String[]> setFilms) {
+        if (entity == null) {
+            return;
+        }
+
+        String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+        String[] films = getFilms.apply(entity);
+
+        if (films != null) {
+            setFilms.accept(entity, Arrays.stream(films)
+                    .map(filmUrl -> filmUrl.startsWith(swapiMainUrl) ? filmUrl.replace(swapiMainUrl, baseUrl) : filmUrl)
+                    .toArray(String[]::new));
+        }
+    }
 }
