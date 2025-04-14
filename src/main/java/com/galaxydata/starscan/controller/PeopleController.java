@@ -5,6 +5,10 @@ import com.galaxydata.starscan.dto.SwapiListResponse;
 import com.galaxydata.starscan.exception.ControllerException;
 import com.galaxydata.starscan.exception.ResourceNotFoundException;
 import com.galaxydata.starscan.service.SwapiPeopleService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,10 +31,15 @@ public class PeopleController {
     }
 
     @GetMapping
+    @Operation(summary = "Get a list of people", description = "Retrieve a paginated list of Star Wars characters.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved the list of people"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     public ResponseEntity<?> getPeople(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int limit,
-            HttpServletRequest request) {
+            @Parameter(description = "HTTP request object") HttpServletRequest request) {
         try {
             SwapiListResponse people = peopleService.getList(page, limit, request);
             return ResponseEntity.ok(people);
@@ -41,7 +50,14 @@ public class PeopleController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getPeopleById(@PathVariable String id, HttpServletRequest request) {
+    @Operation(summary = "Get a person by ID", description = "Retrieve details of a specific Star Wars character by their ID.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved the person"),
+            @ApiResponse(responseCode = "404", description = "Person not found")
+    })
+    public ResponseEntity<?> getPeopleById(
+            @Parameter(description = "ID of the person to retrieve") @PathVariable String id,
+            @Parameter(description = "HTTP request object") HttpServletRequest request) {
         try {
             Person person = peopleService.getById(id, request);
             return ResponseEntity.ok(person);
