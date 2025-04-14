@@ -58,7 +58,7 @@ Manages operations related to Star Wars characters.
     - `200 OK`: Returns the character details.
     - `404 Not Found`: Character not found.
 
-- **GET `/starscan/people?name={name}`**
+- **POST `/starscan/people?name={name}`**
   - **Description**: Retrieves details of Star Wars characters by their name.
   - **Request Parameters**:
     - `name` (String) - The name of the character.
@@ -91,7 +91,7 @@ Manages operations related to Star Wars films.
     - `200 OK`: Returns the film details.
     - `404 Not Found`: Film not found.
 
-- **GET `/starscan/films?title={title}`**
+- **POST `/starscan/films?title={title}`**
   - **Description**: Retrieves details of Star Wars films by their title.
   - **Request Parameters**:
     - `title` (String) - The title of the film.
@@ -124,7 +124,7 @@ Manages operations related to Star Wars starships.
     - `200 OK`: Returns the starship details.
     - `404 Not Found`: Starship not found.
 
-- **GET `/starscan/starships?name={name}`**
+- **POST `/starscan/starships?name={name}`**
   - **Description**: Retrieves details of Star Wars starships by their name.
   - **Request Parameters**:
     - `name` (String) - The name of the starships.
@@ -157,7 +157,7 @@ Manages operations related to Star Wars vehicles.
     - `200 OK`: Returns the vehicle details.
     - `404 Not Found`: Vehicle not found.
 
-- **GET `/starscan/vehicles?name={name}`**
+- **POST `/starscan/vehicles?name={name}`**
   - **Description**: Retrieves details of Star Wars vehicle by their name.
   - **Request Parameters**:
     - `name` (String) - The name of the vehicle.
