@@ -41,4 +41,13 @@ public class SwapiStarshipsService extends BaseSwapiService<Starship> {
         return starship;
     }
 
+    @Override
+    public Starship getByName(String name, HttpServletRequest request) {
+        Starship starship = super.getByName(name, request);
+        replaceArrayUrls(starship, request,
+                s -> s.getProperties().getFilms(),
+                (s, films) -> s.getProperties().setFilms(films));
+        return starship;
+    }
+
 }

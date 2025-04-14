@@ -41,4 +41,13 @@ public class SwapiVehiclesService extends BaseSwapiService<Vehicle>{
         return vehicle;
     }
 
+    @Override
+    public Vehicle getByName(String name, HttpServletRequest request) {
+        Vehicle vehicle = super.getByName(name, request);
+        replaceArrayUrls(vehicle, request,
+                v -> v.getProperties().getFilms(),
+                (v, films) -> v.getProperties().setFilms(films));
+        return vehicle;
+    }
+
 }
