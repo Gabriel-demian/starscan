@@ -11,7 +11,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +19,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/starscan/films")
@@ -68,6 +69,26 @@ public class FilmsController {
             @Parameter(description = "HTTP request object") HttpServletRequest request) {
         try {
             Film film = filmsService.getById(id, request);
+            return ResponseEntity.ok(film);
+        } catch (ResourceNotFoundException ex) {
+            logger.warn("Film not found: {}", ex.getMessage());
+            throw new ControllerException("Film not found", org.springframework.http.HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping(params = "title")
+    @Operation(summary = "Get Film by title", description = "Retrieve details of Star Wars Film by their title.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved the Film",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Film.class))),
+            @ApiResponse(responseCode = "404", description = "Film not found")
+    })
+    public ResponseEntity<?> getFilmByTitle(
+            @Parameter(description = "Title of the film to retrieve") @RequestParam(value = "title") String title,
+            @Parameter(description = "HTTP request object") HttpServletRequest request) {
+
+        try {
+            Film film = filmsService.getByTitle(title, request);
             return ResponseEntity.ok(film);
         } catch (ResourceNotFoundException ex) {
             logger.warn("Film not found: {}", ex.getMessage());

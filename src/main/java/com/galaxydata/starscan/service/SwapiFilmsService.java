@@ -3,9 +3,14 @@ package com.galaxydata.starscan.service;
 import com.galaxydata.starscan.dto.Film;
 import com.galaxydata.starscan.dto.SwapiFilmListResponse;
 import javax.servlet.http.HttpServletRequest;
+
+import com.galaxydata.starscan.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
 
 import static com.galaxydata.starscan.util.UrlUtil.getBaseUrl;
 
@@ -80,6 +85,24 @@ public class SwapiFilmsService extends BaseSwapiService<Film> {
         replaceArrayUrls(film, request,
                 f -> f.getProperties().getStarships(),
                 (f, starships) -> f.getProperties().setStarships(starships));
+
+        return film;
+    }
+
+    public Film getByTitle(String title, HttpServletRequest request) {
+        getLogger().info("Fetching film by Title: {} for path: {}", title, getPath());
+        String url = String.format("%s%s/?title=%s", swapiMainUrl, getPath(), title);
+        Map<String, Object> response = fetchEntityResponse(url);
+
+        List<Map<String, Object>> results = (List<Map<String, Object>>) response.get("result");
+        if (results == null || results.isEmpty()) {
+            throw new ResourceNotFoundException("Film not found");
+        }
+
+        Map<String, Object> firstResult = results.get(0);
+        Film film = objectMapper.convertValue(firstResult, getEntityClass());
+        String baseUrl = getBaseUrl(request) + getPath();
+        setEntityUrl(film, baseUrl + "/" + title);
 
         return film;
     }
