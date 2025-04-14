@@ -36,13 +36,12 @@ class PeopleControllerTest {
 
     @Test
     void testGetPeople_Success() {
-        PaginationRequest paginationRequest = new PaginationRequest(1, 10);
         SwapiListResponse mockResponse = new SwapiListResponse();
         when(peopleService.getList(1, 10, request)).thenReturn(mockResponse);
 
-        ResponseEntity<?> response = peopleController.getPeople(paginationRequest, request);
+        ResponseEntity<?> response = peopleController.getPeople(1, 2, request);
 
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode().value());
         assertEquals(mockResponse, response.getBody());
         verify(peopleService, times(1)).getList(1, 10, request);
     }
@@ -55,7 +54,7 @@ class PeopleControllerTest {
 
         ResponseEntity<?> response = peopleController.getPeopleById(personId, request);
 
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode().value());
         assertEquals(mockPerson, response.getBody());
         verify(peopleService, times(1)).getById(personId, request);
     }

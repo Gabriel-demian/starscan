@@ -1,19 +1,22 @@
 package com.galaxydata.starscan.controller;
 
-import com.galaxydata.starscan.config.PaginationRequest;
 import com.galaxydata.starscan.dto.Film;
 import com.galaxydata.starscan.dto.SwapiFilmListResponse;
 import com.galaxydata.starscan.exception.ControllerException;
 import com.galaxydata.starscan.exception.ResourceNotFoundException;
 import com.galaxydata.starscan.service.SwapiFilmsService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -28,11 +31,19 @@ public class FilmsController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getFilms(@Valid PaginationRequest paginationRequest, HttpServletRequest request) {
+    @Operation(summary = "Get a list of films", description = "Retrieve a paginated list of Star Wars films.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved the list of films"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    public ResponseEntity<?> getFilms(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int limit,
+            @Parameter(description = "HTTP request object") HttpServletRequest request) {
         try {
             SwapiFilmListResponse films = filmsService.getFilmList(
-                    paginationRequest.getPage(),
-                    paginationRequest.getLimit(),
+                    page,
+                    limit,
                     request
             );
             return ResponseEntity.ok(films);
@@ -43,7 +54,14 @@ public class FilmsController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getFilmsById(@PathVariable String id, HttpServletRequest request) {
+    @Operation(summary = "Get a film by ID", description = "Retrieve details of a specific Star Wars film by its ID.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved the film"),
+            @ApiResponse(responseCode = "404", description = "Film not found")
+    })
+    public ResponseEntity<?> getFilmsById(
+            @Parameter(description = "ID of the film to retrieve") @PathVariable String id,
+            @Parameter(description = "HTTP request object") HttpServletRequest request) {
         try {
             Film film = filmsService.getById(id, request);
             return ResponseEntity.ok(film);

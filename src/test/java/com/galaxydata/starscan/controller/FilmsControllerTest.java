@@ -1,10 +1,10 @@
 package com.galaxydata.starscan.controller;
 
-import com.galaxydata.starscan.config.PaginationRequest;
 import com.galaxydata.starscan.dto.Film;
 import com.galaxydata.starscan.dto.SwapiFilmListResponse;
 import com.galaxydata.starscan.exception.ControllerException;
 import com.galaxydata.starscan.service.SwapiFilmsService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -12,13 +12,11 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.ResponseEntity;
 
-import jakarta.servlet.http.HttpServletRequest;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 
 class FilmsControllerTest {
@@ -39,24 +37,22 @@ class FilmsControllerTest {
 
     @Test
     void testGetFilms_Success() {
-        PaginationRequest paginationRequest = new PaginationRequest(1, 10);
         SwapiFilmListResponse mockResponse = new SwapiFilmListResponse();
         when(filmsService.getFilmList(1, 10, request)).thenReturn(mockResponse);
 
-        ResponseEntity<?> response = filmsController.getFilms(paginationRequest, request);
+        ResponseEntity<?> response = filmsController.getFilms(1, 10, request);
 
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode().value());
         assertEquals(mockResponse, response.getBody());
         verify(filmsService, times(1)).getFilmList(1, 10, request);
     }
 
     @Test
     void testGetFilms_Exception() {
-        PaginationRequest paginationRequest = new PaginationRequest(1, 10);
         when(filmsService.getFilmList(1, 10, request)).thenThrow(new RuntimeException("Service error"));
 
         ControllerException exception = assertThrows(ControllerException.class, () -> {
-            filmsController.getFilms(paginationRequest, request);
+            filmsController.getFilms(1, 10, request);
         });
 
         assertEquals("Error fetching films", exception.getMessage());
@@ -71,7 +67,7 @@ class FilmsControllerTest {
 
         ResponseEntity<?> response = filmsController.getFilmsById(filmId, request);
 
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode().value());
         assertEquals(mockFilm, response.getBody());
         verify(filmsService, times(1)).getById(filmId, request);
     }

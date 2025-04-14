@@ -1,21 +1,24 @@
 package com.galaxydata.starscan.controller;
 
-import com.galaxydata.starscan.config.PaginationRequest;
 import com.galaxydata.starscan.dto.SwapiListResponse;
 import com.galaxydata.starscan.dto.Vehicle;
 import com.galaxydata.starscan.exception.ControllerException;
 import com.galaxydata.starscan.exception.ResourceNotFoundException;
 import com.galaxydata.starscan.service.SwapiVehiclesService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @RestController
 @RequestMapping("/starscan/vehicles")
@@ -29,11 +32,19 @@ public class VehiclesController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getVehicles(@Valid PaginationRequest paginationRequest, HttpServletRequest request) {
+    @Operation(summary = "Get a list of vehicles", description = "Retrieve a paginated list of Star Wars vehicles.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved the list of vehicles"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    public ResponseEntity<?> getVehicles(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int limit,
+            @Parameter(description = "HTTP request object") HttpServletRequest request) {
         try {
             SwapiListResponse vehicles = vehiclesService.getList(
-                    paginationRequest.getPage(),
-                    paginationRequest.getLimit(),
+                    page,
+                    limit,
                     request
             );
             return ResponseEntity.ok(vehicles);
@@ -44,7 +55,14 @@ public class VehiclesController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getVehiclesById(@PathVariable String id, HttpServletRequest request) {
+    @Operation(summary = "Get a vehicle by ID", description = "Retrieve details of a specific Star Wars vehicle by its ID.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved the vehicle"),
+            @ApiResponse(responseCode = "404", description = "Vehicle not found")
+    })
+    public ResponseEntity<?> getVehiclesById(
+            @Parameter(description = "ID of the vehicle to retrieve") @PathVariable String id,
+            @Parameter(description = "HTTP request object") HttpServletRequest request) {
         try {
             Vehicle vehicle = vehiclesService.getById(id, request);
             return ResponseEntity.ok(vehicle);

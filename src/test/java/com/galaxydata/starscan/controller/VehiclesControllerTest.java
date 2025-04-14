@@ -1,9 +1,9 @@
 package com.galaxydata.starscan.controller;
 
-import com.galaxydata.starscan.config.PaginationRequest;
 import com.galaxydata.starscan.dto.SwapiListResponse;
 import com.galaxydata.starscan.dto.Vehicle;
 import com.galaxydata.starscan.service.SwapiVehiclesService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -11,12 +11,10 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.ResponseEntity;
 
-import jakarta.servlet.http.HttpServletRequest;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class VehiclesControllerTest {
 
@@ -36,13 +34,12 @@ class VehiclesControllerTest {
 
     @Test
     void testGetVehicles_Success() {
-        PaginationRequest paginationRequest = new PaginationRequest(1, 10);
         SwapiListResponse mockResponse = new SwapiListResponse();
         when(vehiclesService.getList(1, 10, request)).thenReturn(mockResponse);
 
-        ResponseEntity<?> response = vehiclesController.getVehicles(paginationRequest, request);
+        ResponseEntity<?> response = vehiclesController.getVehicles(1, 10, request);
 
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode().value());
         assertEquals(mockResponse, response.getBody());
         verify(vehiclesService, times(1)).getList(1, 10, request);
     }
@@ -55,7 +52,7 @@ class VehiclesControllerTest {
 
         ResponseEntity<?> response = vehiclesController.getVehiclesById(vehicleId, request);
 
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode().value());
         assertEquals(mockVehicle, response.getBody());
         verify(vehiclesService, times(1)).getById(vehicleId, request);
     }
