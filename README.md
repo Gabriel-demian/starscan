@@ -11,58 +11,160 @@ StarScan API is a Spring Boot application that provides endpoints to interact wi
 - Secure endpoints using JWT-based authentication.
 - OpenAPI documentation available via Swagger UI.
 
-## Endpoints
+---
 
-### Authentication Endpoint
+# API Documentation
 
-#### Authenticate User
-- **URL**: `/authenticate`
-- **Method**: `POST`
-- **Request Parameters**:
-    - `username`: The username of the user.
-    - `password`: The password of the user.
-- **Response**: A JWT token to be used for accessing secured endpoints.
+## Controllers
 
-### People Endpoints
+### 1. **AuthController**
+Handles user authentication and JWT token generation.
 
-#### Get a List of People
-- **URL**: `/starscan/people`
-- **Method**: `GET`
-- **Query Parameters**:
-    - `page` (optional, default: `1`): The page number to retrieve.
-    - `limit` (optional, default: `10`): The number of items per page.
-- **Response**: A paginated list of Star Wars characters.
+- **Base URL**: `/authenticate`
 
-#### Get a Person by ID
-- **URL**: `/starscan/people/{id}`
-- **Method**: `GET`
-- **Path Parameters**:
-    - `id`: The ID of the person to retrieve.
-- **Response**: Details of the specified Star Wars character.
+#### Endpoints:
+- **POST `/authenticate`**
+  - **Description**: Authenticates a user and generates a JWT token.
+  - **Request Parameters**:
+    - `Content-Type`: application/x-www-form-urlencoded
+    - `username` (String) - testUser
+    - `password` (String) - testPassword
+  - **Responses**:
+    - `200 OK`: Returns the generated JWT token.
+    - `401 Unauthorized`: Invalid credentials.
 
-#### Get a Person by Name
-- **URL**: `/starscan/people`
-- **Method**: `GET`
-- **Query Parameters**:
-    - `name`: The name of the person to retrieve.
-- **Response**: Details of the specified Star Wars character.
+---
 
-### Films Endpoints
+### 2. **PeopleController**
+Manages operations related to Star Wars characters.
 
-#### Get a List of Films
-- **URL**: `/starscan/films`
-- **Method**: `GET`
-- **Query Parameters**:
-    - `page` (optional, default: `1`): The page number to retrieve.
-    - `limit` (optional, default: `10`): The number of items per page.
-- **Response**: A paginated list of Star Wars films.
+- **Base URL**: `/starscan/people`
 
-#### Get a Film by ID
-- **URL**: `/starscan/films/{id}`
-- **Method**: `GET`
-- **Path Parameters**:
-    - `id`: The ID of the film to retrieve.
-- **Response**: Details of the specified Star Wars film.
+#### Endpoints:
+- **GET `/starscan/people`**
+  - **Description**: Retrieves a paginated list of Star Wars characters.
+  - **Request Parameters**:
+    - `page` (int, default: 1) - The page number.
+    - `limit` (int, default: 10) - The number of items per page.
+  - **Responses**:
+    - `200 OK`: Returns a list of characters.
+    - `500 Internal Server Error`: Error fetching the list.
+
+- **GET `/starscan/people/{id}`**
+  - **Description**: Retrieves details of a specific Star Wars character by ID.
+  - **Path Parameters**:
+    - `id` (String) - The ID of the character.
+  - **Responses**:
+    - `200 OK`: Returns the character details.
+    - `404 Not Found`: Character not found.
+
+- **GET `/starscan/people?name={name}`**
+  - **Description**: Retrieves details of Star Wars characters by their name.
+  - **Request Parameters**:
+    - `name` (String) - The name of the character.
+  - **Responses**:
+    - `200 OK`: Returns the character details.
+    - `404 Not Found`: Character not found.
+
+---
+
+### 3. **FilmsController**
+Manages operations related to Star Wars films.
+
+- **Base URL**: `/starscan/films`
+
+#### Endpoints:
+- **GET `/starscan/films`**
+  - **Description**: Retrieves a paginated list of Star Wars films.
+  - **Request Parameters**:
+    - `page` (int, default: 1) - The page number.
+    - `limit` (int, default: 10) - The number of items per page.
+  - **Responses**:
+    - `200 OK`: Returns a list of films.
+    - `500 Internal Server Error`: Error fetching the list.
+
+- **GET `/starscan/films/{id}`**
+  - **Description**: Retrieves details of a specific Star Wars film by ID.
+  - **Path Parameters**:
+    - `id` (String) - The ID of the film.
+  - **Responses**:
+    - `200 OK`: Returns the film details.
+    - `404 Not Found`: Film not found.
+
+- **GET `/starscan/films?title={title}`**
+  - **Description**: Retrieves details of Star Wars films by their title.
+  - **Request Parameters**:
+    - `title` (String) - The title of the film.
+  - **Responses**:
+    - `200 OK`: Returns the film details.
+    - `404 Not Found`: Film not found.
+
+---
+
+### 4. **StarshipsController**
+Manages operations related to Star Wars starships.
+
+- **Base URL**: `/starscan/starships`
+
+#### Endpoints:
+- **GET `/starscan/starships`**
+  - **Description**: Retrieves a paginated list of Star Wars starships.
+  - **Request Parameters**:
+    - `page` (int, default: 1) - The page number.
+    - `limit` (int, default: 10) - The number of items per page.
+  - **Responses**:
+    - `200 OK`: Returns a list of starships.
+    - `500 Internal Server Error`: Error fetching the list.
+
+- **GET `/starscan/starships/{id}`**
+  - **Description**: Retrieves details of a specific Star Wars starship by ID.
+  - **Path Parameters**:
+    - `id` (String) - The ID of the starship.
+  - **Responses**:
+    - `200 OK`: Returns the starship details.
+    - `404 Not Found`: Starship not found.
+
+- **GET `/starscan/starships?name={name}`**
+  - **Description**: Retrieves details of Star Wars starships by their name.
+  - **Request Parameters**:
+    - `name` (String) - The name of the starships.
+  - **Responses**:
+    - `200 OK`: Returns the starship details.
+    - `404 Not Found`: starship not found.
+
+---
+
+### 5. **VehiclesController**
+Manages operations related to Star Wars vehicles.
+
+- **Base URL**: `/starscan/vehicles`
+
+#### Endpoints:
+- **GET `/starscan/vehicles`**
+  - **Description**: Retrieves a paginated list of Star Wars vehicles.
+  - **Request Parameters**:
+    - `page` (int, default: 1) - The page number.
+    - `limit` (int, default: 10) - The number of items per page.
+  - **Responses**:
+    - `200 OK`: Returns a list of vehicles.
+    - `500 Internal Server Error`: Error fetching the list.
+
+- **GET `/starscan/vehicles/{id}`**
+  - **Description**: Retrieves details of a specific Star Wars vehicle by ID.
+  - **Path Parameters**:
+    - `id` (String) - The ID of the vehicle.
+  - **Responses**:
+    - `200 OK`: Returns the vehicle details.
+    - `404 Not Found`: Vehicle not found.
+
+- **GET `/starscan/vehicles?name={name}`**
+  - **Description**: Retrieves details of Star Wars vehicle by their name.
+  - **Request Parameters**:
+    - `name` (String) - The name of the vehicle.
+  - **Responses**:
+    - `200 OK`: Returns the vehicle details.
+    - `404 Not Found`: vehicle not found.
+---
 
 ## Configuration
 
@@ -106,3 +208,6 @@ The application includes custom exception handling:
 3. Run the application with more memory:
    ```bash
    java -Xms512m -Xmx1024m -jar target/starscan-0.0.1-SNAPSHOT.jar
+
+
+
