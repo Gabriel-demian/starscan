@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -102,6 +103,46 @@ public abstract class BaseSwapiService<T> {
         T entity = objectMapper.convertValue(response.get("result"), getEntityClass());
         String baseUrl = getBaseUrl(request) + getPath();
         setEntityUrl(entity, baseUrl + "/" + id);
+
+        return entity;
+    }
+
+    /**
+     * Retrieves an entity by its name from the SWAPI service, adapts its URLs to the application's base URL,
+     * and returns the entity.
+     *
+     * <p>The method sends a GET request to the SWAPI service with the provided name as a query parameter.
+     * The response is expected to contain a list of results, from which the first result is mapped to the entity class.
+     * If no results are found, a {@link ResourceNotFoundException} is thrown.</p>
+     *
+     * @param name    The name of the entity to retrieve.
+     * @param request The HTTP request object used to construct the base URL.
+     * @return The entity with its URLs adapted to the application's base URL.
+     * @throws ResourceNotFoundException if no entity is found with the given name.
+     */
+    public T getByName(String name, HttpServletRequest request) {
+        getLogger().info("Fetching entity by Name: {} for path: {}", name, getPath());
+
+        String url = String.format("%s%s/?name=%s", swapiMainUrl, getPath(), name);
+        Map<String, Object> response = restTemplate.getForObject(url, Map.class);
+
+        if (response == null || !"ok".equals(response.get("message"))) {
+            throw new ResourceNotFoundException("Entity not found");
+        }
+
+        // Extract the "result" field as a list
+        List<Map<String, Object>> results = (List<Map<String, Object>>) response.get("result");
+        if (results == null || results.isEmpty()) {
+            throw new ResourceNotFoundException("Entity not found");
+        }
+
+        // Map the first result to the entity class
+        Map<String, Object> firstResult = results.get(0);
+        T entity = objectMapper.convertValue(firstResult, getEntityClass());
+
+        // Set the entity URL
+        String baseUrl = getBaseUrl(request) + getPath();
+        setEntityUrl(entity, baseUrl + "/" + name);
 
         return entity;
     }

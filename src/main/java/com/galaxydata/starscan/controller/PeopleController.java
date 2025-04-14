@@ -70,4 +70,23 @@ public class PeopleController {
             throw new ControllerException("Person not found", org.springframework.http.HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping("/name/{name}")
+    @Operation(summary = "Get a person by Name", description = "Retrieve details of a specific Star Wars character by their ID.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved the person",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Person.class))),
+            @ApiResponse(responseCode = "404", description = "Person not found")
+    })
+    public ResponseEntity<?> getPeopleByName(
+            @Parameter(description = "Name of the person to retrieve") @PathVariable String name,
+            @Parameter(description = "HTTP request object") HttpServletRequest request) {
+        try {
+            Person person = peopleService.getByName(name, request);
+            return ResponseEntity.ok(person);
+        } catch (ResourceNotFoundException ex) {
+            logger.warn("Person not found: {}", ex.getMessage());
+            throw new ControllerException("Person not found", org.springframework.http.HttpStatus.NOT_FOUND);
+        }
+    }
 }
