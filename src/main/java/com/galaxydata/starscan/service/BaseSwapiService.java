@@ -177,7 +177,7 @@ public abstract class BaseSwapiService<T> {
             Map<String, Object> response = restTemplate.getForObject(url, Map.class);
             return response;
         } catch (Exception e) {
-            throw new ResourceNotFoundException("Entity not found");
+            throw new ResourceNotFoundException("Entity not found", e);
         }
     }
 
