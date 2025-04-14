@@ -5,9 +5,12 @@ import com.galaxydata.starscan.dto.Vehicle;
 import com.galaxydata.starscan.exception.ControllerException;
 import com.galaxydata.starscan.exception.ResourceNotFoundException;
 import com.galaxydata.starscan.service.SwapiVehiclesService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
-import javax.servlet.http.HttpServletRequest;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/starscan/vehicles")
@@ -70,6 +70,26 @@ public class VehiclesController {
             @Parameter(description = "HTTP request object") HttpServletRequest request) {
         try {
             Vehicle vehicle = vehiclesService.getById(id, request);
+            return ResponseEntity.ok(vehicle);
+        } catch (ResourceNotFoundException ex) {
+            logger.warn("Vehicle not found: {}", ex.getMessage());
+            throw new ControllerException("Vehicle not found", org.springframework.http.HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping(params = "name")
+    @Operation(summary = "Get Vehicle by name", description = "Retrieve details of Star Wars Vehicle by their name.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved the Vehicle",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Vehicle.class))),
+            @ApiResponse(responseCode = "404", description = "People not found")
+    })
+    public ResponseEntity<?> getVehicleByName(
+            @Parameter(description = "Name of the vehicle to retrieve") @RequestParam(value = "name") String name,
+            @Parameter(description = "HTTP request object") HttpServletRequest request) {
+
+        try {
+            Vehicle vehicle = vehiclesService.getByName(name, request);
             return ResponseEntity.ok(vehicle);
         } catch (ResourceNotFoundException ex) {
             logger.warn("Vehicle not found: {}", ex.getMessage());
