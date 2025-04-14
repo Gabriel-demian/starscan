@@ -173,11 +173,12 @@ public abstract class BaseSwapiService<T> {
      * @throws ResourceNotFoundException if the response is null or invalid.
      */
     Map<String, Object> fetchEntityResponse(String url) {
-        Map<String, Object> response = restTemplate.getForObject(url, Map.class);
-        if (response == null || !"ok".equals(response.get("message"))) {
+        try{
+            Map<String, Object> response = restTemplate.getForObject(url, Map.class);
+            return response;
+        } catch (Exception e) {
             throw new ResourceNotFoundException("Entity not found");
         }
-        return response;
     }
 
 }
