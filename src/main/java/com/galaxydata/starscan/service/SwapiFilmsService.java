@@ -46,7 +46,7 @@ public class SwapiFilmsService extends BaseSwapiService<Film> {
         SwapiFilmListResponse response = restTemplate.getForObject(url, SwapiFilmListResponse.class);
 
         if (response != null && response.getResults() != null) {
-            String baseUrl = getBaseUrl(request) + getPath();
+            String baseUrl = getBaseUrl(request) + CONTROLLER_MAIN_URL + getPath();
             response.getResults().forEach(filmResult -> {
                 String filmUrl = baseUrl + "/" + filmResult.getUid();
                 filmResult.getProperties().setUrl(filmUrl);
@@ -63,6 +63,7 @@ public class SwapiFilmsService extends BaseSwapiService<Film> {
                 replaceArrayUrls(filmResult, request,
                         f -> f.getProperties().getCharacters(),
                         (f, characters) -> f.getProperties().setCharacters(characters));
+
             });
         }
 
@@ -72,20 +73,7 @@ public class SwapiFilmsService extends BaseSwapiService<Film> {
     @Override
     public Film getById(String id, HttpServletRequest request) {
         Film film = super.getById(id, request);
-
-        replaceArrayUrls(film, request,
-                f -> f.getProperties().getCharacters(),
-                (f, characters) -> f.getProperties().setCharacters(characters));
-
-        replaceArrayUrls(film, request,
-                f -> f.getProperties().getVehicles(),
-                (f, vehicles) -> f.getProperties().setVehicles(vehicles));
-
-        replaceArrayUrls(film, request,
-                f -> f.getProperties().getStarships(),
-                (f, starships) -> f.getProperties().setStarships(starships));
-
-        return film;
+        return replaceFilmsUrls(request, film);
     }
 
     public Film getByTitle(String title, HttpServletRequest request) {
@@ -100,8 +88,24 @@ public class SwapiFilmsService extends BaseSwapiService<Film> {
 
         Map<String, Object> firstResult = results.get(0);
         Film film = objectMapper.convertValue(firstResult, getEntityClass());
-        String baseUrl = getBaseUrl(request) + getPath();
+        String baseUrl = getBaseUrl(request) + CONTROLLER_MAIN_URL + getPath();
         setEntityUrl(film, baseUrl + "/" + title);
+
+        return replaceFilmsUrls(request, film);
+    }
+
+    private Film replaceFilmsUrls(HttpServletRequest request, Film film) {
+        replaceArrayUrls(film, request,
+                f -> f.getProperties().getCharacters(),
+                (f, characters) -> f.getProperties().setCharacters(characters));
+
+        replaceArrayUrls(film, request,
+                f -> f.getProperties().getVehicles(),
+                (f, vehicles) -> f.getProperties().setVehicles(vehicles));
+
+        replaceArrayUrls(film, request,
+                f -> f.getProperties().getStarships(),
+                (f, starships) -> f.getProperties().setStarships(starships));
 
         return film;
     }

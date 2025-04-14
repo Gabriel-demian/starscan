@@ -99,7 +99,7 @@ public abstract class BaseSwapiService<T> {
         Map<String, Object> response = fetchEntityResponse(url);
 
         T entity = objectMapper.convertValue(response.get("result"), getEntityClass());
-        String baseUrl = getBaseUrl(request) + "/starscan" + getPath();
+        String baseUrl = getBaseUrl(request) + CONTROLLER_MAIN_URL + getPath();
         setEntityUrl(entity, baseUrl + "/" + id);
 
         return entity;
@@ -130,7 +130,7 @@ public abstract class BaseSwapiService<T> {
 
         Map<String, Object> firstResult = results.get(0);
         T entity = objectMapper.convertValue(firstResult, getEntityClass());
-        String baseUrl = getBaseUrl(request) + "/starscan" + getPath();
+        String baseUrl = getBaseUrl(request) + CONTROLLER_MAIN_URL + getPath();
         setEntityUrl(entity, baseUrl + "/" + name);
 
         return entity;
