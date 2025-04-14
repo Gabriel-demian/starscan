@@ -1,4 +1,3 @@
-Readme
 # StarScan API
 
 StarScan API is a Spring Boot application that provides endpoints to interact with the Star Wars API (SWAPI). It allows users to retrieve information about Star Wars characters (people) and films.
@@ -9,9 +8,20 @@ StarScan API is a Spring Boot application that provides endpoints to interact wi
 - Fetch details of a specific character by ID or name.
 - Retrieve a paginated list of Star Wars films.
 - Fetch details of a specific film by ID.
+- Secure endpoints using JWT-based authentication.
 - OpenAPI documentation available via Swagger UI.
 
 ## Endpoints
+
+### Authentication Endpoint
+
+#### Authenticate User
+- **URL**: `/authenticate`
+- **Method**: `POST`
+- **Request Parameters**:
+    - `username`: The username of the user.
+    - `password`: The password of the user.
+- **Response**: A JWT token to be used for accessing secured endpoints.
 
 ### People Endpoints
 
@@ -57,10 +67,15 @@ StarScan API is a Spring Boot application that provides endpoints to interact wi
 ## Configuration
 
 ### Security
-The application uses Spring Security to configure access to the endpoints:
-- All `/starscan/**` endpoints are publicly accessible.
-- Swagger UI and OpenAPI documentation are also publicly accessible.
+The application uses Spring Security and JWT for securing endpoints:
+- The `/authenticate` endpoint is publicly accessible for obtaining a JWT token.
+- All `/starscan/**` endpoints require a valid JWT token for access.
+- Swagger UI and OpenAPI documentation are publicly accessible.
 - CSRF protection is disabled for simplicity (not recommended for production).
+
+### JWT Configuration
+- The application uses a secure Base64-encoded secret key for signing JWT tokens.
+- Tokens are valid for 10 hours by default.
 
 ### OpenAPI Documentation
 The API documentation is available at:
@@ -78,6 +93,7 @@ The application includes custom exception handling:
 - **Java**: Programming language.
 - **Spring Boot**: Framework for building the application.
 - **Spring Security**: For securing the endpoints.
+- **JWT (io.jsonwebtoken)**: For token-based authentication.
 - **Swagger/OpenAPI**: For API documentation.
 - **Maven**: Build tool.
 
