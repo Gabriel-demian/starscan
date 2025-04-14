@@ -92,13 +92,8 @@ public abstract class BaseSwapiService<T> {
      */
     public T getById(String id, HttpServletRequest request) {
         getLogger().info("Fetching entity by ID: {} for path: {}", id, getPath());
-
         String url = String.format("%s%s/%s", swapiMainUrl, getPath(), id);
-        Map<String, Object> response = restTemplate.getForObject(url, Map.class);
-
-        if (response == null || !"ok".equals(response.get("message"))) {
-            throw new ResourceNotFoundException("Entity not found");
-        }
+        Map<String, Object> response = fetchEntityResponse(url);
 
         T entity = objectMapper.convertValue(response.get("result"), getEntityClass());
         String baseUrl = getBaseUrl(request) + getPath();
@@ -122,25 +117,16 @@ public abstract class BaseSwapiService<T> {
      */
     public T getByName(String name, HttpServletRequest request) {
         getLogger().info("Fetching entity by Name: {} for path: {}", name, getPath());
-
         String url = String.format("%s%s/?name=%s", swapiMainUrl, getPath(), name);
-        Map<String, Object> response = restTemplate.getForObject(url, Map.class);
+        Map<String, Object> response = fetchEntityResponse(url);
 
-        if (response == null || !"ok".equals(response.get("message"))) {
-            throw new ResourceNotFoundException("Entity not found");
-        }
-
-        // Extract the "result" field as a list
         List<Map<String, Object>> results = (List<Map<String, Object>>) response.get("result");
         if (results == null || results.isEmpty()) {
             throw new ResourceNotFoundException("Entity not found");
         }
 
-        // Map the first result to the entity class
         Map<String, Object> firstResult = results.get(0);
         T entity = objectMapper.convertValue(firstResult, getEntityClass());
-
-        // Set the entity URL
         String baseUrl = getBaseUrl(request) + getPath();
         setEntityUrl(entity, baseUrl + "/" + name);
 
@@ -162,6 +148,7 @@ public abstract class BaseSwapiService<T> {
      * @param request  The HTTP request object used to construct the base URL.
      * @param getFilms A function to get the array of film URLs from the entity.
      * @param setFilms A consumer to set the modified array of film URLs back to the entity.
+     * @param <T>      The type of the entity.
      */
     protected <T> void replaceArrayUrls(T entity, HttpServletRequest request, Function<T, String[]> getFilms, BiConsumer<T, String[]> setFilms) {
         if (entity == null) {
@@ -177,4 +164,20 @@ public abstract class BaseSwapiService<T> {
                     .toArray(String[]::new));
         }
     }
+
+    /**
+     * Fetches the response for an entity from the SWAPI service and validates it.
+     *
+     * @param url The URL to fetch the entity from.
+     * @return A map containing the response data.
+     * @throws ResourceNotFoundException if the response is null or invalid.
+     */
+    private Map<String, Object> fetchEntityResponse(String url) {
+        Map<String, Object> response = restTemplate.getForObject(url, Map.class);
+        if (response == null || !"ok".equals(response.get("message"))) {
+            throw new ResourceNotFoundException("Entity not found");
+        }
+        return response;
+    }
+
 }
