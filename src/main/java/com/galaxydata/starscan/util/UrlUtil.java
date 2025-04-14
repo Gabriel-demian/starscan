@@ -33,6 +33,9 @@ public class UrlUtil {
 
         try {
             URI uri = new URI(swapiUrl);
+            if (!uri.isAbsolute()) {
+                throw new InvalidSwapiUrlException("Invalid SWAPI URL: " + swapiUrl);
+            }
             String query = uri.getQuery(); // Extract query parameters (e.g., page=2&limit=10)
             return getBaseUrl(request) + path + "?" + query; // Construct the adapted URL
         } catch (URISyntaxException e) {
