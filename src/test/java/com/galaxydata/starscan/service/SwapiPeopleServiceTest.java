@@ -55,9 +55,9 @@ public class SwapiPeopleServiceTest {
 
         assertNotNull(response);
         assertEquals(10, response.getResults().size());
-        assertEquals("http://localhost:8080/people/11", response.getResults().get(0).getUrl());
-        assertEquals("http://localhost:8080/people?page=1&limit=10", response.getPrevious());
-        assertEquals("http://localhost:8080/people?page=3&limit=10", response.getNext());
+        assertEquals("http://localhost:8080/starscan/people/11", response.getResults().get(0).getUrl());
+        assertEquals("http://localhost:8080/starscan/people?page=1&limit=10", response.getPrevious());
+        assertEquals("http://localhost:8080/starscan/people?page=3&limit=10", response.getNext());
     }
 
     @Test
@@ -76,7 +76,7 @@ public class SwapiPeopleServiceTest {
 
         assertNotNull(retrievedPerson);
         assertEquals("Luke Skywalker", retrievedPerson.getProperties().getName());
-        assertEquals("http://localhost:8080/people/1", retrievedPerson.getProperties().getUrl());
+        assertEquals("http://localhost:8080/starscan/people/1", retrievedPerson.getProperties().getUrl());
 
     }
 
@@ -105,7 +105,7 @@ public class SwapiPeopleServiceTest {
 
         assertNotNull(retrievedPerson);
         assertEquals("Luke Skywalker", retrievedPerson.getProperties().getName());
-        assertEquals("http://localhost:8080/people/Luke Skywalker", retrievedPerson.getProperties().getUrl());
+        assertEquals("http://localhost:8080/starscan/people/Luke Skywalker", retrievedPerson.getProperties().getUrl());
     }
 
     @Test
