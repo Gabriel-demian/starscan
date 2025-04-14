@@ -81,7 +81,7 @@ public class StarshipsController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Successfully retrieved the Starship",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = Starship.class))),
-            @ApiResponse(responseCode = "404", description = "People not found")
+            @ApiResponse(responseCode = "404", description = "Starship not found")
     })
     public ResponseEntity<?> getStarshipByName(
             @Parameter(description = "Name of the starship to retrieve") @RequestParam(value = "name") String name,
