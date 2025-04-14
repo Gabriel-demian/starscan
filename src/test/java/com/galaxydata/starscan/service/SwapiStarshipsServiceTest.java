@@ -3,6 +3,7 @@ package com.galaxydata.starscan.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.galaxydata.starscan.dto.Starship;
 import com.galaxydata.starscan.dto.Starship.StarshipProperties;
+import com.galaxydata.starscan.dto.SwapiListResponse;
 import com.galaxydata.starscan.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.mock.web.MockHttpServletRequest;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -71,5 +76,53 @@ public class SwapiStarshipsServiceTest {
         assertThrows(ResourceNotFoundException.class, () -> starshipsService.getById("0", request));
     }
 
-    // Puedes agregar más tests para getList() y otros métodos si es necesario
+    @Test
+    public void testGetList() {
+        SwapiListResponse mockResponse = new SwapiListResponse();
+        SwapiListResponse.Results result = new SwapiListResponse.Results();
+        result.setUid("1");
+        mockResponse.setResults(Collections.singletonList(result));
+        mockResponse.setPrevious("https://www.swapi.tech/starships/?page=1&limit=10");
+        mockResponse.setNext("https://www.swapi.tech/starships/?page=3&limit=10");
+
+        SwapiListResponse response = starshipsService.getList(2, 10, request);
+
+        assertNotNull(response);
+        assertEquals(10, response.getResults().size());
+        assertEquals("http://localhost:8080/starscan/starships/21", response.getResults().get(0).getUrl());
+        assertEquals("http://localhost:8080/starscan/starships?page=1&limit=10", response.getPrevious());
+        assertEquals("http://localhost:8080/starscan/starships?page=3&limit=10", response.getNext());
+    }
+
+    @Test
+    public void testGetByName() {
+        Map<String, Object> mockResponse = new HashMap<>();
+        Map<String, Object> result = new HashMap<>();
+        result.put("name", "Millennium Falcon");
+        result.put("url", "someUrl");
+        mockResponse.put("result", Collections.singletonList(result));
+
+        Starship starship = new Starship();
+        StarshipProperties properties = new StarshipProperties();
+        properties.setName("Millennium Falcon");
+        properties.setUrl("someUrl");
+        starship.setProperties(properties);
+
+        when(objectMapper.convertValue(anyMap(), eq(Starship.class))).thenReturn(starship);
+
+        Starship retrievedStarship = starshipsService.getByName("Millennium Falcon", request);
+
+        assertNotNull(retrievedStarship);
+        assertEquals("Millennium Falcon", retrievedStarship.getProperties().getName());
+        assertEquals("http://localhost:8080/starscan/starships/Millennium Falcon", retrievedStarship.getProperties().getUrl());
+    }
+
+    @Test
+    public void testGetByNameNotFound() {
+        Map<String, Object> mockResponse = new HashMap<>();
+        mockResponse.put("result", Collections.emptyList());
+
+        assertThrows(ResourceNotFoundException.class, () -> starshipsService.getByName("Nonexistent Name", request));
+    }
+
 }

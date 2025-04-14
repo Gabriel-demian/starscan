@@ -32,8 +32,7 @@ public abstract class BaseSwapiService<T> {
     @Value("${swapi.main.url}")
     protected String swapiMainUrl;
 
-    @Value("${controller.main.url}")
-    protected String controllerMainUrl;
+    protected String controllerMainUrl = "/starscan";
 
     /**
      * Returns the specific path for the SWAPI resource handled by the service.
