@@ -7,7 +7,7 @@ import com.galaxydata.starscan.exception.ResourceNotFoundException;
 import com.galaxydata.starscan.service.SwapiVehiclesService;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;

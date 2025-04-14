@@ -3,7 +3,7 @@ package com.galaxydata.starscan.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.galaxydata.starscan.dto.SwapiListResponse;
 import com.galaxydata.starscan.exception.ResourceNotFoundException;
-import jakarta.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.client.RestTemplate;
