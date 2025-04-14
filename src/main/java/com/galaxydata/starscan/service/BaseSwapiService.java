@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
@@ -32,7 +33,7 @@ public abstract class BaseSwapiService<T> {
     @Value("${swapi.main.url}")
     protected String swapiMainUrl;
 
-    protected String controllerMainUrl = "/starscan";
+    protected static final String CONTROLLER_MAIN_URL = "/starscan";
 
     /**
      * Returns the specific path for the SWAPI resource handled by the service.
@@ -74,10 +75,10 @@ public abstract class BaseSwapiService<T> {
         SwapiListResponse response = restTemplate.getForObject(url, SwapiListResponse.class);
 
         if (response != null && response.getResults() != null) {
-            String baseUrl = getBaseUrl(request) + controllerMainUrl + getPath();
+            String baseUrl = getBaseUrl(request) + CONTROLLER_MAIN_URL + getPath();
             response.getResults().forEach(p -> p.setUrl(baseUrl + "/" + p.getUid()));
-            response.setPrevious(adaptSwapiPageUrl(response.getPrevious(), request, controllerMainUrl + getPath()));
-            response.setNext(adaptSwapiPageUrl(response.getNext(), request, controllerMainUrl + getPath()));
+            response.setPrevious(adaptSwapiPageUrl(response.getPrevious(), request, CONTROLLER_MAIN_URL + getPath()));
+            response.setNext(adaptSwapiPageUrl(response.getNext(), request, CONTROLLER_MAIN_URL + getPath()));
         }
 
         return response;
