@@ -7,6 +7,8 @@ import com.galaxydata.starscan.exception.ResourceNotFoundException;
 import com.galaxydata.starscan.service.SwapiPeopleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,7 +35,8 @@ public class PeopleController {
     @GetMapping
     @Operation(summary = "Get a list of people", description = "Retrieve a paginated list of Star Wars characters.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved the list of people"),
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved the list of people",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = SwapiListResponse.class))),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     public ResponseEntity<?> getPeople(
@@ -52,7 +55,8 @@ public class PeopleController {
     @GetMapping("/{id}")
     @Operation(summary = "Get a person by ID", description = "Retrieve details of a specific Star Wars character by their ID.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved the person"),
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved the person",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Person.class))),
             @ApiResponse(responseCode = "404", description = "Person not found")
     })
     public ResponseEntity<?> getPeopleById(

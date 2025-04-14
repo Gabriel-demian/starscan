@@ -2,11 +2,14 @@ package com.galaxydata.starscan.controller;
 
 import com.galaxydata.starscan.dto.Starship;
 import com.galaxydata.starscan.dto.SwapiListResponse;
+import com.galaxydata.starscan.dto.Vehicle;
 import com.galaxydata.starscan.exception.ControllerException;
 import com.galaxydata.starscan.exception.ResourceNotFoundException;
 import com.galaxydata.starscan.service.SwapiStarshipsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,7 +36,8 @@ public class StarshipsController {
     @GetMapping
     @Operation(summary = "Get a list of starships", description = "Retrieve a paginated list of Star Wars starships.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved the list of starships"),
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved the list of starships",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = SwapiListResponse.class))),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     public ResponseEntity<?> getStarships(
@@ -56,7 +60,8 @@ public class StarshipsController {
     @GetMapping("/{id}")
     @Operation(summary = "Get a starship by ID", description = "Retrieve details of a specific Star Wars starship by its ID.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved the starship"),
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved the starship",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Starship.class))),
             @ApiResponse(responseCode = "404", description = "Starship not found")
     })
     public ResponseEntity<?> getStarshipsById(

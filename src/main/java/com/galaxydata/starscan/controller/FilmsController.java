@@ -7,6 +7,8 @@ import com.galaxydata.starscan.exception.ResourceNotFoundException;
 import com.galaxydata.starscan.service.SwapiFilmsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,7 +35,8 @@ public class FilmsController {
     @GetMapping
     @Operation(summary = "Get a list of films", description = "Retrieve a paginated list of Star Wars films.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved the list of films"),
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved the list of films",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = SwapiFilmListResponse.class))),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     public ResponseEntity<?> getFilms(
@@ -56,7 +59,8 @@ public class FilmsController {
     @GetMapping("/{id}")
     @Operation(summary = "Get a film by ID", description = "Retrieve details of a specific Star Wars film by its ID.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved the film"),
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved the film",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Film.class))),
             @ApiResponse(responseCode = "404", description = "Film not found")
     })
     public ResponseEntity<?> getFilmsById(

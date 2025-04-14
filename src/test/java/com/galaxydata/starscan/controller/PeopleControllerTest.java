@@ -1,6 +1,5 @@
 package com.galaxydata.starscan.controller;
 
-import com.galaxydata.starscan.config.PaginationRequest;
 import com.galaxydata.starscan.dto.Person;
 import com.galaxydata.starscan.dto.SwapiListResponse;
 import com.galaxydata.starscan.service.SwapiPeopleService;

@@ -1,7 +1,9 @@
 package com.galaxydata.starscan.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.v3.oas.annotations.media.Schema;
 
+@Schema(description = "Base class for all SWAPI entities, containing common properties.")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class SwapiBaseEntity {
 

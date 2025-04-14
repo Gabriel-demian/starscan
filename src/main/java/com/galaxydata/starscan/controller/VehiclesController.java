@@ -5,6 +5,8 @@ import com.galaxydata.starscan.dto.Vehicle;
 import com.galaxydata.starscan.exception.ControllerException;
 import com.galaxydata.starscan.exception.ResourceNotFoundException;
 import com.galaxydata.starscan.service.SwapiVehiclesService;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +36,8 @@ public class VehiclesController {
     @GetMapping
     @Operation(summary = "Get a list of vehicles", description = "Retrieve a paginated list of Star Wars vehicles.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved the list of vehicles"),
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved the list of vehicles",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = SwapiListResponse.class))),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     public ResponseEntity<?> getVehicles(
@@ -57,9 +60,11 @@ public class VehiclesController {
     @GetMapping("/{id}")
     @Operation(summary = "Get a vehicle by ID", description = "Retrieve details of a specific Star Wars vehicle by its ID.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved the vehicle"),
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved the list of vehicles",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Vehicle.class))),
             @ApiResponse(responseCode = "404", description = "Vehicle not found")
     })
+
     public ResponseEntity<?> getVehiclesById(
             @Parameter(description = "ID of the vehicle to retrieve") @PathVariable String id,
             @Parameter(description = "HTTP request object") HttpServletRequest request) {

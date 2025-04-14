@@ -2,9 +2,11 @@ package com.galaxydata.starscan.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.List;
 
+@Schema(description = "Represents a response containing a list of Star Wars films.")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SwapiFilmListResponse {
 
