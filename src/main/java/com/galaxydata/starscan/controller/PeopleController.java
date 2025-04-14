@@ -71,16 +71,17 @@ public class PeopleController {
         }
     }
 
-    @GetMapping("/name/{name}")
-    @Operation(summary = "Get a person by Name", description = "Retrieve details of a specific Star Wars character by their ID.")
+    @GetMapping(params = "name")
+    @Operation(summary = "Get people by name", description = "Retrieve details of Star Wars characters by their name.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved the person",
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved the people",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = Person.class))),
-            @ApiResponse(responseCode = "404", description = "Person not found")
+            @ApiResponse(responseCode = "404", description = "People not found")
     })
     public ResponseEntity<?> getPeopleByName(
-            @Parameter(description = "Name of the person to retrieve") @PathVariable String name,
+            @Parameter(description = "Name of the person to retrieve") @RequestParam(value = "name") String name,
             @Parameter(description = "HTTP request object") HttpServletRequest request) {
+
         try {
             Person person = peopleService.getByName(name, request);
             return ResponseEntity.ok(person);
