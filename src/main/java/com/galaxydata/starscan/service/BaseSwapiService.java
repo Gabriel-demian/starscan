@@ -32,6 +32,9 @@ public abstract class BaseSwapiService<T> {
     @Value("${swapi.main.url}")
     protected String swapiMainUrl;
 
+    @Value("${controller.main.url}")
+    protected String controllerMainUrl;
+
     /**
      * Returns the specific path for the SWAPI resource handled by the service.
      *
@@ -72,10 +75,10 @@ public abstract class BaseSwapiService<T> {
         SwapiListResponse response = restTemplate.getForObject(url, SwapiListResponse.class);
 
         if (response != null && response.getResults() != null) {
-            String baseUrl = getBaseUrl(request) + getPath();
+            String baseUrl = getBaseUrl(request) + controllerMainUrl + getPath();
             response.getResults().forEach(p -> p.setUrl(baseUrl + "/" + p.getUid()));
-            response.setPrevious(adaptSwapiPageUrl(response.getPrevious(), request, getPath()));
-            response.setNext(adaptSwapiPageUrl(response.getNext(), request, getPath()));
+            response.setPrevious(adaptSwapiPageUrl(response.getPrevious(), request, controllerMainUrl + getPath()));
+            response.setNext(adaptSwapiPageUrl(response.getNext(), request, controllerMainUrl + getPath()));
         }
 
         return response;
