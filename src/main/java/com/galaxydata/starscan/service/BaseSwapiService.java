@@ -3,19 +3,19 @@ package com.galaxydata.starscan.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.galaxydata.starscan.dto.SwapiListResponse;
 import com.galaxydata.starscan.exception.ResourceNotFoundException;
-import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-import static com.galaxydata.starscan.util.UrlUtil.getBaseUrl;
 import static com.galaxydata.starscan.util.UrlUtil.adaptSwapiPageUrl;
+import static com.galaxydata.starscan.util.UrlUtil.getBaseUrl;
 
 /**
  * Abstract base service for interacting with the SWAPI (Star Wars API).
@@ -96,7 +96,7 @@ public abstract class BaseSwapiService<T> {
         Map<String, Object> response = fetchEntityResponse(url);
 
         T entity = objectMapper.convertValue(response.get("result"), getEntityClass());
-        String baseUrl = getBaseUrl(request) + getPath();
+        String baseUrl = getBaseUrl(request) + "/starscan" + getPath();
         setEntityUrl(entity, baseUrl + "/" + id);
 
         return entity;
@@ -127,7 +127,7 @@ public abstract class BaseSwapiService<T> {
 
         Map<String, Object> firstResult = results.get(0);
         T entity = objectMapper.convertValue(firstResult, getEntityClass());
-        String baseUrl = getBaseUrl(request) + getPath();
+        String baseUrl = getBaseUrl(request) + "/starscan" + getPath();
         setEntityUrl(entity, baseUrl + "/" + name);
 
         return entity;
@@ -155,7 +155,7 @@ public abstract class BaseSwapiService<T> {
             return;
         }
 
-        String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+        String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/starscan";
         String[] films = getFilms.apply(entity);
 
         if (films != null) {
@@ -173,7 +173,7 @@ public abstract class BaseSwapiService<T> {
      * @throws ResourceNotFoundException if the response is null or invalid.
      */
     Map<String, Object> fetchEntityResponse(String url) {
-        try{
+        try {
             Map<String, Object> response = restTemplate.getForObject(url, Map.class);
             return response;
         } catch (Exception e) {

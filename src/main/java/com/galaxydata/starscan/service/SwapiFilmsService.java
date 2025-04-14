@@ -2,13 +2,12 @@ package com.galaxydata.starscan.service;
 
 import com.galaxydata.starscan.dto.Film;
 import com.galaxydata.starscan.dto.SwapiFilmListResponse;
-import javax.servlet.http.HttpServletRequest;
-
 import com.galaxydata.starscan.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
