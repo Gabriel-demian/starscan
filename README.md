@@ -87,3 +87,6 @@ The application includes custom exception handling:
 2. Build the project using Maven:
    ```bash
    mvn clean install
+3. Run the application with more memory:
+   ```bash
+   java -Xms512m -Xmx1024m -jar target/starscan-0.0.1-SNAPSHOT.jar
